@@ -13,6 +13,12 @@ func Unpack(in string) (string, error) {
 		return "", nil
 	}
 
+	_, err := strconv.Atoi(string(in[0]))
+	if err == nil {
+		// first symbol is digit
+		return "", ErrInvalidString
+	}
+
 	var result strings.Builder
 	i := 0
 	step := 2
@@ -20,7 +26,6 @@ func Unpack(in string) (string, error) {
 	for i < len(in)-1 {
 		_, err := strconv.Atoi(string(in[i]))
 		if err == nil {
-			// first symbol is digit
 			return "", ErrInvalidString
 		}
 		// symbol is literal

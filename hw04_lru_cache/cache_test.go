@@ -50,12 +50,18 @@ func TestCache(t *testing.T) {
 	})
 
 	t.Run("purge logic", func(t *testing.T) {
-		// Write me
+		c := NewCache(100_000)
+		for i := 0; i < 100_000; i++ {
+			c.Set(Key(strconv.Itoa(i)), i)
+		}
+		c.Clear()
+		_, res := c.Get(Key(strconv.Itoa(rand.Intn(100_000))))
+		require.False(t, res)
 	})
 }
 
 func TestCacheMultithreading(t *testing.T) {
-	t.Skip() // Remove me if task with asterisk completed.
+	// t.Skip() // Remove me if task with asterisk completed.
 
 	c := NewCache(10)
 	wg := &sync.WaitGroup{}
@@ -76,4 +82,48 @@ func TestCacheMultithreading(t *testing.T) {
 	}()
 
 	wg.Wait()
+}
+
+func TestCacheOne(t *testing.T) {
+	c := NewCache(5)
+	c.Set("a", 1)
+	c.Set("b", 2)
+	c.Set("c", 3)
+	c.Set("d", 4)
+	c.Set("e", 5)
+	c.Set("aa", 11)
+	c.Set("bb", 12)
+	c.Set("cc", 13)
+	c.Set("dd", 14)
+	c.Set("ee", 15)
+	c.Get("aa")
+	c.Get("a")
+	c.Get("bb")
+	c.Get("cc")
+	c.Get("dd")
+	c.Get("aa")
+	c.Get("a")
+	c.Get("bb")
+	c.Get("cc")
+	c.Get("dd")
+}
+
+func TestCacheSecond(t *testing.T) {
+	c := NewCache(5)
+	c.Set("a", 1)
+	c.Set("b", 2)
+	c.Set("c", 3)
+	c.Set("d", 4)
+	c.Set("e", 5)
+	c.Set("aa", 11)
+	c.Set("bb", 12)
+	c.Set("cc", 13)
+	c.Set("dd", 14)
+	c.Set("ee", 15)
+	c.Get("ee")
+	c.Get("dd")
+	c.Get("cc")
+	c.Get("bb")
+	c.Get("aa")
+	c.Get("ee")
 }

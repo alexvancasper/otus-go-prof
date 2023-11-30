@@ -8,7 +8,6 @@ type List interface {
 	PushBack(v interface{}) *ListItem
 	Remove(i *ListItem)
 	MoveToFront(i *ListItem)
-	PrintFront() []int
 }
 
 type ListItem struct {
@@ -128,14 +127,4 @@ func (l *list) MoveToFront(i *ListItem) {
 		prev = cur.Prev
 		next = cur.Next
 	}
-}
-
-func (l *list) PrintFront() []int {
-	cur := l.head
-	var result []int
-	for cur != nil {
-		result = append(result, cur.Value.(int))
-		cur = cur.Next
-	}
-	return result
 }

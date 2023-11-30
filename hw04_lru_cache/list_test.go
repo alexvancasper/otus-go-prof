@@ -61,7 +61,7 @@ func TestRemoveMiddle(t *testing.T) {
 	l.Remove(element)         // [10, 30]
 	require.Equal(t, 2, l.Len())
 	expected := []int{10, 30}
-	require.Equal(t, expected, l.PrintFront())
+	require.Equal(t, expected, ListToInt(l))
 }
 
 func TestRemoveBack(t *testing.T) {
@@ -75,7 +75,7 @@ func TestRemoveBack(t *testing.T) {
 	l.Remove(element)   // [10, 20]
 	require.Equal(t, 2, l.Len())
 	expected := []int{10, 20}
-	require.Equal(t, expected, l.PrintFront())
+	require.Equal(t, expected, ListToInt(l))
 }
 
 func TestRemoveFront(t *testing.T) {
@@ -89,7 +89,7 @@ func TestRemoveFront(t *testing.T) {
 	l.Remove(element)    // [20, 30]
 	require.Equal(t, 2, l.Len())
 	expected := []int{20, 30}
-	require.Equal(t, expected, l.PrintFront())
+	require.Equal(t, expected, ListToInt(l))
 }
 
 func TestPushFront(t *testing.T) {
@@ -98,7 +98,7 @@ func TestPushFront(t *testing.T) {
 	l.PushFront(20)
 	l.PushFront(10)
 	expected := []int{10, 20, 30}
-	require.Equal(t, expected, l.PrintFront())
+	require.Equal(t, expected, ListToInt(l))
 	require.Equal(t, 3, l.Len())
 }
 
@@ -108,7 +108,7 @@ func TestPushBack(t *testing.T) {
 	l.PushBack(20)
 	l.PushBack(30)
 	expected := []int{10, 20, 30}
-	require.Equal(t, expected, l.PrintFront())
+	require.Equal(t, expected, ListToInt(l))
 	require.Equal(t, 3, l.Len())
 }
 
@@ -121,7 +121,7 @@ func TestPushBackAndFront(t *testing.T) {
 	l.PushBack(50)
 	l.PushFront(60)
 	expected := []int{60, 40, 20, 10, 30, 50}
-	require.Equal(t, expected, l.PrintFront())
+	require.Equal(t, expected, ListToInt(l))
 	require.Equal(t, 6, l.Len())
 }
 
@@ -131,21 +131,29 @@ func TestMoveToFrontFront(t *testing.T) {
 	l.PushFront(20)
 	l.PushFront(10)
 	expected := []int{10, 20, 30}
-	require.Equal(t, expected, l.PrintFront())
+	require.Equal(t, expected, ListToInt(l))
 	require.Equal(t, 3, l.Len())
 
 	el := l.Front()
 	l.MoveToFront(el)
 	expected = []int{10, 20, 30}
-	require.Equal(t, expected, l.PrintFront())
+	require.Equal(t, expected, ListToInt(l))
 
 	el = l.Back()
 	l.MoveToFront(el)
 	expected = []int{30, 10, 20}
-	require.Equal(t, expected, l.PrintFront())
+	require.Equal(t, expected, ListToInt(l))
 
 	el = l.Front().Next
 	l.MoveToFront(el)
 	expected = []int{10, 30, 20}
-	require.Equal(t, expected, l.PrintFront())
+	require.Equal(t, expected, ListToInt(l))
+}
+
+func ListToInt(l List) []int {
+	elems := make([]int, 0, l.Len())
+	for i := l.Front(); i != nil; i = i.Next {
+		elems = append(elems, i.Value.(int))
+	}
+	return elems
 }

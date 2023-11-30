@@ -49,3 +49,103 @@ func TestList(t *testing.T) {
 		require.Equal(t, []int{70, 80, 60, 40, 10, 30, 50}, elems)
 	})
 }
+
+func TestRemoveMiddle(t *testing.T) {
+	l := NewList()
+
+	l.PushFront(10) // [10]
+	l.PushBack(20)  // [10, 20]
+	l.PushBack(30)  // [10, 20, 30]
+
+	element := l.Front().Next // 20
+	l.Remove(element)         // [10, 30]
+	require.Equal(t, 2, l.Len())
+	expected := []int{10, 30}
+	require.Equal(t, expected, l.PrintFront())
+}
+
+func TestRemoveBack(t *testing.T) {
+	l := NewList()
+
+	l.PushFront(10) // [10]
+	l.PushBack(20)  // [10, 20]
+	l.PushBack(30)  // [10, 20, 30]
+
+	element := l.Back() // 30
+	l.Remove(element)   // [10, 20]
+	require.Equal(t, 2, l.Len())
+	expected := []int{10, 20}
+	require.Equal(t, expected, l.PrintFront())
+}
+
+func TestRemoveFront(t *testing.T) {
+	l := NewList()
+
+	l.PushFront(10) // [10]
+	l.PushBack(20)  // [10, 20]
+	l.PushBack(30)  // [10, 20, 30]
+
+	element := l.Front() // 30
+	l.Remove(element)    // [20, 30]
+	require.Equal(t, 2, l.Len())
+	expected := []int{20, 30}
+	require.Equal(t, expected, l.PrintFront())
+}
+
+func TestPushFront(t *testing.T) {
+	l := NewList()
+	l.PushFront(30)
+	l.PushFront(20)
+	l.PushFront(10)
+	expected := []int{10, 20, 30}
+	require.Equal(t, expected, l.PrintFront())
+	require.Equal(t, 3, l.Len())
+}
+
+func TestPushBack(t *testing.T) {
+	l := NewList()
+	l.PushBack(10)
+	l.PushBack(20)
+	l.PushBack(30)
+	expected := []int{10, 20, 30}
+	require.Equal(t, expected, l.PrintFront())
+	require.Equal(t, 3, l.Len())
+}
+
+func TestPushBackAndFront(t *testing.T) {
+	l := NewList()
+	l.PushBack(10)
+	l.PushFront(20)
+	l.PushBack(30)
+	l.PushFront(40)
+	l.PushBack(50)
+	l.PushFront(60)
+	expected := []int{60, 40, 20, 10, 30, 50}
+	require.Equal(t, expected, l.PrintFront())
+	require.Equal(t, 6, l.Len())
+}
+
+func TestMoveToFrontFront(t *testing.T) {
+	l := NewList()
+	l.PushFront(30)
+	l.PushFront(20)
+	l.PushFront(10)
+	expected := []int{10, 20, 30}
+	require.Equal(t, expected, l.PrintFront())
+	require.Equal(t, 3, l.Len())
+
+	el := l.Front()
+	l.MoveToFront(el)
+	expected = []int{10, 20, 30}
+	require.Equal(t, expected, l.PrintFront())
+
+	el = l.Back()
+	l.MoveToFront(el)
+	expected = []int{30, 10, 20}
+	require.Equal(t, expected, l.PrintFront())
+
+	el = l.Front().Next
+	l.MoveToFront(el)
+	expected = []int{10, 30, 20}
+	require.Equal(t, expected, l.PrintFront())
+}

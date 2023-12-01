@@ -44,21 +44,22 @@ func (c *lruCache) Get(key Key) (interface{}, bool) {
 func (c *lruCache) Set(key Key, value interface{}) bool {
 	c.mutex.Lock()
 	defer c.mutex.Unlock()
+
 	var v *ListItem
 	var ok bool
 	if v, ok = c.items[key]; !ok {
+		if c.queue.Len() >= c.capacity {
+			lastElem := c.queue.Back()
+			lastElemKey := lastElem.Value.(element)
+			c.queue.Remove(lastElem)
+			delete(c.items, lastElemKey.key)
+		}
 		el := element{
 			key:   key,
 			value: value,
 		}
 		head := c.queue.PushFront(el)
 		c.items[key] = head
-		if c.queue.Len() > c.capacity {
-			lastElem := c.queue.Back()
-			lastElemKey := lastElem.Value.(element)
-			c.queue.Remove(lastElem)
-			delete(c.items, lastElemKey.key)
-		}
 		return false
 	}
 	v.Value = element{
@@ -73,4 +74,5 @@ func (c *lruCache) Clear() {
 	c.mutex.Lock()
 	defer c.mutex.Unlock()
 	c.items = make(map[Key]*ListItem, c.capacity)
+	c.queue = NewList()
 }

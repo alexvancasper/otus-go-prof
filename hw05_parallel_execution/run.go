@@ -18,7 +18,7 @@ func Run(tasks []Task, n, m int) error {
 	var errCount int32
 	atomic.StoreInt32(&errCount, 0)
 
-	job := make(chan Task, n)
+	job := make(chan Task)
 	ctx, ctxCancel := context.WithCancel(context.Background())
 
 	wg.Add(n)
